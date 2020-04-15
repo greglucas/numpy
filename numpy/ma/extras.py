@@ -1916,8 +1916,15 @@ def polyfit(x, y, deg, rcond=None, full=False, w=None, cov=False):
         not_m = ~m
         if w is not None:
             w = w[not_m]
-        return np.polyfit(x[not_m], y[not_m], deg, rcond, full, w, cov)
-    else:
-        return np.polyfit(x, y, deg, rcond, full, w, cov)
+        x = x[not_m]
+        y = y[not_m]
+
+    # Only pass the ndarray data
+    if w is not None:
+        w = w.view(np.ndarray)
+    x = x.view(np.ndarray)
+    y = y.view(np.ndarray)
+
+    return np.polyfit(x, y, deg, rcond, full, w, cov)
 
 polyfit.__doc__ = ma.doc_note(np.polyfit.__doc__, polyfit.__doc__)
